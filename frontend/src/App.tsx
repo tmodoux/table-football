@@ -3,6 +3,8 @@ import "./App.css";
 import Scoreboard from "./components/Scoreboard";
 import Game from "./components/Game";
 import Player from "./components/Player";
+import { useQuery } from "@apollo/client";
+import { GET_PLAYERS } from "./queries";
 
 export type PlayerType = {
   id: string;
@@ -33,8 +35,18 @@ function App() {
     },
   ]);
 
+  useQuery(GET_PLAYERS, {
+    onCompleted(data) {
+      updatePlayers(data.players);
+    },
+  });
+
   const addPlayer = (player: PlayerType) => {
     setPlayers([...players, player]);
+  };
+
+  const updatePlayers = (updatedPlayers: PlayerType[]) => {
+    setPlayers(updatedPlayers);
   };
 
   return (
