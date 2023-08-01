@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { PlayerType } from "../App";
 import { Alert, Button, InputNumber } from "antd";
+import { ReactComponent as Player1Icon } from "../icons/player1.svg";
+import { ReactComponent as Player2Icon } from "../icons/player2.svg";
+import CustomIcon from "./CustomIcon";
 
 type GamePropsType = {
   players: PlayerType[];
@@ -32,6 +35,18 @@ const Game = ({ players }: GamePropsType) => {
     }
   };
 
+  const getPlayerIcon = (playerId: string): ReactNode => {
+    if (playerId !== player1 && playerId !== player2) {
+      return <></>;
+    } else {
+      return (
+        <CustomIcon
+          component={playerId === player1 ? Player1Icon : Player2Icon}
+        />
+      );
+    }
+  };
+
   return (
     <div>
       <h2>Current game</h2>
@@ -56,6 +71,7 @@ const Game = ({ players }: GamePropsType) => {
           <Button
             key={player.id}
             size="large"
+            icon={getPlayerIcon(player.id)}
             onClick={() => clickPlayer(player.id)}
           >
             {player.name} ({player.id})
@@ -63,8 +79,18 @@ const Game = ({ players }: GamePropsType) => {
         ))}
       </div>
       <div>
-        <InputNumber value={score1} min={0} onChange={handleScore1Change} />
-        <InputNumber value={score2} min={0} onChange={handleScore2Change} />
+        <InputNumber
+          addonBefore={<CustomIcon component={Player1Icon} />}
+          value={score1}
+          min={0}
+          onChange={handleScore1Change}
+        />
+        <InputNumber
+          addonBefore={<CustomIcon component={Player2Icon} />}
+          value={score2}
+          min={0}
+          onChange={handleScore2Change}
+        />
       </div>
       <Button size="large">End current game</Button>
     </div>

@@ -24,7 +24,7 @@ function App() {
       goalsAgainst: 12,
     },
     {
-      id: "1",
+      id: "2",
       name: "jeanne",
       wins: 4,
       losses: 3,
