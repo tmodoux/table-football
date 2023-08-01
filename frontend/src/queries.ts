@@ -25,3 +25,16 @@ export const CREATE_PLAYER = gql`
     }
   }
 `;
+
+export const UPDATE_SCORE = gql`
+  mutation UpdateScore($data: UpdateScoreInput!) {
+    updateScore(data: $data) {
+      id
+      name
+      wins
+      losses
+      goalsFor
+      goalsAgainst
+    }
+  }
+`;

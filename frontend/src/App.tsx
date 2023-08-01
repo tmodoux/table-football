@@ -42,7 +42,11 @@ function App() {
   return (
     <div className="App">
       {contextHolder}
-      <Game players={players} />
+      <Game
+        players={players}
+        updatePlayers={updatePlayers}
+        messageApi={messageApi}
+      />
       <Player addPlayer={addPlayer} messageApi={messageApi} />
       <Scoreboard players={players} />
     </div>

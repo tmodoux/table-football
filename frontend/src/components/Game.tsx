@@ -4,16 +4,32 @@ import { Alert, Button, InputNumber } from "antd";
 import { ReactComponent as Player1Icon } from "../icons/player1.svg";
 import { ReactComponent as Player2Icon } from "../icons/player2.svg";
 import CustomIcon from "./CustomIcon";
+import { UPDATE_SCORE } from "../queries";
+import { useMutation } from "@apollo/client";
+import { MessageInstance } from "antd/es/message/interface";
 
 type GamePropsType = {
   players: PlayerType[];
+  updatePlayers: (players: PlayerType[]) => void;
+  messageApi: MessageInstance;
 };
 
-const Game = ({ players }: GamePropsType) => {
+const Game = ({ players, updatePlayers, messageApi }: GamePropsType) => {
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
   const [score1, setScore1] = useState(0);
   const [score2, setScore2] = useState(0);
+
+  const [updateScore, { data, loading, error }] = useMutation(UPDATE_SCORE, {
+    onCompleted(data, clientOptions) {
+      updatePlayers(data.updateScore);
+      messageApi.success("Scores successfully updated!");
+    },
+    onError(error) {
+      messageApi.error("Error while updating scores!");
+      console.log(error);
+    },
+  });
 
   const handleScore1Change = (value: any) => {
     setScore1(value);
@@ -45,6 +61,39 @@ const Game = ({ players }: GamePropsType) => {
         />
       );
     }
+  };
+
+  const endGame = () => {
+    let score;
+    if (score1 === score2) {
+      score = {
+        winnerId: player1,
+        winnerGoals: score1,
+        looserId: player2,
+        looserGoals: score2,
+      };
+    } else if (score1 > score2) {
+      score = {
+        winnerId: player1,
+        winnerGoals: score1,
+        looserId: player2,
+        looserGoals: score2,
+      };
+    } else {
+      score = {
+        winnerId: player2,
+        winnerGoals: score2,
+        looserId: player1,
+        looserGoals: score1,
+      };
+    }
+
+    updateScore({ variables: { data: score } });
+
+    setPlayer1("");
+    setPlayer2("");
+    setScore1(0);
+    setScore2(0);
   };
 
   return (
@@ -96,7 +145,9 @@ const Game = ({ players }: GamePropsType) => {
           onChange={handleScore2Change}
         />
       </div>
-      <Button size="large">End current game</Button>
+      <Button size="large" onClick={() => endGame()}>
+        End current game
+      </Button>
     </div>
   );
 };
