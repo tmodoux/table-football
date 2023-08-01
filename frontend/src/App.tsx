@@ -22,7 +22,7 @@ function App() {
 
   useQuery(GET_PLAYERS, {
     onCompleted(data) {
-      updatePlayers(data.players);
+      updatePlayers(data.getPlayers);
       messageApi.success("Players successfully loaded!");
     },
     onError(error) {

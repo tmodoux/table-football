@@ -1,7 +1,10 @@
 import { InputType, Field } from "type-graphql";
 
 @InputType()
-export class UpdateGameInput {
+export class EndGameInput {
+  @Field()
+  id?: string;
+
   @Field()
   player1?: string;
 
@@ -13,7 +16,4 @@ export class UpdateGameInput {
 
   @Field()
   goals2?: number;
-
-  @Field()
-  isPlaying?: Boolean;
 }

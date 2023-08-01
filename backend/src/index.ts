@@ -3,11 +3,12 @@ import { ApolloServer } from "apollo-server";
 import { PlayerResolver } from "./resolvers/PlayerResolver";
 import { buildSchema } from "type-graphql";
 import { AppDataSource } from "./data-source";
+import { GameResolver } from "./resolvers/GameResolver";
 
 async function main() {
   await AppDataSource.initialize();
   const schema = await buildSchema({
-    resolvers: [PlayerResolver],
+    resolvers: [PlayerResolver, GameResolver],
     validate: { forbidUnknownValues: false },
   });
   const server = new ApolloServer({ schema });

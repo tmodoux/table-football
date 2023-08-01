@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_PLAYERS = gql`
   query GetPlayers {
-    players {
+    getPlayers {
       id
       name
       wins
@@ -26,9 +26,35 @@ export const CREATE_PLAYER = gql`
   }
 `;
 
-export const UPDATE_SCORE = gql`
-  mutation UpdateScore($data: UpdateScoreInput!) {
-    updateScore(data: $data) {
+export const GET_CURRENT_GAME = gql`
+  query GetCurrentGame {
+    getCurrentGame {
+      id
+      player1
+      player2
+      goals1
+      goals2
+      isPlaying
+    }
+  }
+`;
+
+export const UPDATE_GAME = gql`
+  mutation UpdateGame($id: String!, $data: UpdateGameInput!) {
+    updateGame(id: $id, data: $data) {
+      id
+      player1
+      player2
+      goals1
+      goals2
+      isPlaying
+    }
+  }
+`;
+
+export const END_GAME = gql`
+  mutation EndGame($data: EndGameInput!) {
+    endGame(data: $data) {
       id
       name
       wins

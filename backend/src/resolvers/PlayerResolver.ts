@@ -5,7 +5,7 @@ import { CreatePlayerInput } from "../inputs/CreatePlayerInput";
 @Resolver()
 export class PlayerResolver {
   @Query(() => [Player])
-  players() {
+  getPlayers() {
     return Player.find();
   }
 

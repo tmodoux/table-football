@@ -1,11 +1,11 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { PlayerType } from "../App";
 import { Alert, Button, InputNumber } from "antd";
 import { ReactComponent as Player1Icon } from "../icons/player1.svg";
 import { ReactComponent as Player2Icon } from "../icons/player2.svg";
 import CustomIcon from "./CustomIcon";
-import { UPDATE_SCORE } from "../queries";
-import { useMutation } from "@apollo/client";
+import { END_GAME, GET_CURRENT_GAME, UPDATE_GAME } from "../queries";
+import { useMutation, useQuery } from "@apollo/client";
 import { MessageInstance } from "antd/es/message/interface";
 
 type GamePropsType = {
@@ -15,86 +15,95 @@ type GamePropsType = {
 };
 
 const Game = ({ players, updatePlayers, messageApi }: GamePropsType) => {
-  const [player1, setPlayer1] = useState("");
-  const [player2, setPlayer2] = useState("");
-  const [score1, setScore1] = useState(0);
-  const [score2, setScore2] = useState(0);
+  const newGame = {
+    id: "",
+    player1: "",
+    player2: "",
+    goals1: 0,
+    goals2: 0,
+    isPlaying: true,
+  };
+  const [currentGame, setCurrentGame] = useState(newGame);
+  const isLive = true;
 
-  const [updateScore] = useMutation(UPDATE_SCORE, {
+  useQuery(GET_CURRENT_GAME, {
     onCompleted(data) {
-      updatePlayers(data.updateScore);
-      messageApi.success("Scores successfully updated!");
+      const currentGame = data.getCurrentGame;
+      if (currentGame) {
+        setCurrentGame({
+          id: currentGame.id,
+          player1: currentGame.player1,
+          player2: currentGame.player2,
+          goals1: currentGame.goals1,
+          goals2: currentGame.goals2,
+          isPlaying: currentGame.isPlaying,
+        });
+        messageApi.success("Current game successfully loaded!");
+      }
     },
     onError(error) {
-      messageApi.error("Error while updating scores!");
+      messageApi.error("Error while loading current game!");
       console.log(error);
     },
   });
 
-  const handleScore1Change = (value: any) => {
-    setScore1(value);
-  };
+  const [endGame] = useMutation(END_GAME, {
+    onCompleted(data) {
+      updatePlayers(data.endGame);
+      setCurrentGame(newGame);
+      messageApi.success("Scores successfully updated!");
+    },
+    onError(error) {
+      messageApi.error("Error while ending game!");
+      console.log(error);
+    },
+    variables: { data: currentGame }
+  });
 
-  const handleScore2Change = (value: any) => {
-    setScore2(value);
-  };
+  const [updateGame] = useMutation(UPDATE_GAME, {
+    onCompleted() {
+      messageApi.success("Game successfully updated!");
+    },
+    onError(error) {
+      messageApi.error("Error while updating game!");
+      console.log(error);
+    },
+  });
 
   const clickPlayer = (playerId: string): void => {
-    if (playerId === player1) {
-      setPlayer1("");
-    } else if (playerId === player2) {
-      setPlayer2("");
-    } else if (!player1) {
-      setPlayer1(playerId);
-    } else if (!player2) {
-      setPlayer2(playerId);
+    if (playerId === currentGame.player1) {
+      updateGameField("player1", "");
+    } else if (playerId === currentGame.player2) {
+      updateGameField("player2", "");
+    } else if (!currentGame.player1) {
+      updateGameField("player1", playerId);
+    } else if (!currentGame.player2) {
+      updateGameField("player2", playerId);
     }
   };
 
   const getPlayerIcon = (playerId: string): ReactNode => {
-    if (playerId !== player1 && playerId !== player2) {
+    if (playerId !== currentGame.player1 && playerId !== currentGame.player2) {
       return <></>;
     } else {
       return (
         <CustomIcon
-          component={playerId === player1 ? Player1Icon : Player2Icon}
+          component={playerId === currentGame.player1 ? Player1Icon : Player2Icon}
         />
       );
     }
   };
 
-  const endGame = () => {
-    let score;
-    if (score1 === score2) {
-      score = {
-        winnerId: player1,
-        winnerGoals: score1,
-        looserId: player2,
-        looserGoals: score2,
-      };
-    } else if (score1 > score2) {
-      score = {
-        winnerId: player1,
-        winnerGoals: score1,
-        looserId: player2,
-        looserGoals: score2,
-      };
-    } else {
-      score = {
-        winnerId: player2,
-        winnerGoals: score2,
-        looserId: player1,
-        looserGoals: score1,
-      };
+  const updateGameField = (fieldName: string, value?: string | number) => {
+    const updatedGame = { ...currentGame, [fieldName]: value };
+    setCurrentGame(updatedGame);
+    if (isLive) {
+      const { id, ...game } = updatedGame;
+      updateGame({
+        variables: { id, data: game }
+      });
     }
-
-    updateScore({ variables: { data: score } });
-
-    setPlayer1("");
-    setPlayer2("");
-    setScore1(0);
-    setScore2(0);
-  };
+  }
 
   return (
     <div>
@@ -134,19 +143,19 @@ const Game = ({ players, updatePlayers, messageApi }: GamePropsType) => {
       <div>
         <InputNumber
           addonBefore={<CustomIcon component={Player1Icon} />}
-          value={score1}
+          value={currentGame.goals1}
           min={0}
-          onChange={handleScore1Change}
+          onChange={(value) => updateGameField("goals1", value || 0)}
         />
         <InputNumber
           addonBefore={<CustomIcon component={Player2Icon} />}
-          value={score2}
+          value={currentGame.goals2}
           min={0}
-          onChange={handleScore2Change}
+          onChange={(value) => updateGameField("goals2", value || 0)}
         />
       </div>
-      <Button size="large" disabled={!player1 || !player2} onClick={() => endGame()}>
-        End current game
+      <Button size="large" disabled={!currentGame.player1 || !currentGame.player2} onClick={() => endGame()}>
+        {"End current game"}
       </Button>
     </div>
   );
