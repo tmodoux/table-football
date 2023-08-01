@@ -42,14 +42,13 @@ const Scoreboard = ({ players }: ScoreboardPropsType) => {
   ];
 
   const data = players.map((player) => {
-    const gamesPlayed = player.wins + player.losses;
     return {
       key: player.id,
       playerName: player.name,
-      gamesPlayed: gamesPlayed,
+      gamesPlayed: player.played,
       wins: player.wins,
       losses: player.losses,
-      ratio: player.wins ? gamesPlayed / player.wins : "-",
+      ratio: player.wins ? player.played / player.wins : "-",
       goalsFor: player.goalsFor,
       goalsAgainst: player.goalsAgainst,
       goalsDifference: player.goalsFor - player.goalsAgainst,

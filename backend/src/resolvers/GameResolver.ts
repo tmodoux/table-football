@@ -54,8 +54,16 @@ export class GameResolver {
     if (!player1 || !player2) throw new Error("Players not found!");
     // Wins/losses do not change if tie
     if (game.goals1 != game.goals2) {
-      game.goals1 > game.goals2 ? player1.wins++ && player2.losses++ : player2.wins++ && player1.losses++;
+      if (game.goals1 > game.goals2) {
+        player1.wins++;
+        player2.losses++;
+      } else {
+        player2.wins++;
+        player1.losses++;
+      }
     }
+    player1.played++;
+    player2.played++;
     player1.goalsAgainst += game.goals2;
     player1.goalsFor += game.goals2;
     player2.goalsAgainst += game.goals1;

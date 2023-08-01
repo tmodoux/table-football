@@ -14,6 +14,10 @@ export class Player extends BaseEntity {
 
   @Field(() => Number)
   @Column()
+  played: number;
+
+  @Field(() => Number)
+  @Column()
   wins: number;
 
   @Field(() => Number)

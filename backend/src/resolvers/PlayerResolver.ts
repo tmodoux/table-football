@@ -13,6 +13,7 @@ export class PlayerResolver {
   async createPlayer(@Arg("data") data: CreatePlayerInput) {
     const player = Player.create({
       name: data.name,
+      played: 0,
       wins: 0,
       losses: 0,
       goalsAgainst: 0,

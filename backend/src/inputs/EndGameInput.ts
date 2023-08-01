@@ -16,4 +16,7 @@ export class EndGameInput {
 
   @Field()
   goals2?: number;
+
+  @Field()
+  isPlaying?: boolean;
 }

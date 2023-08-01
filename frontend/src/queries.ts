@@ -5,6 +5,7 @@ export const GET_PLAYERS = gql`
     getPlayers {
       id
       name
+      played
       wins
       losses
       goalsFor
@@ -18,6 +19,7 @@ export const CREATE_PLAYER = gql`
     createPlayer(data: $data) {
       id
       name
+      played
       wins
       losses
       goalsFor
@@ -57,6 +59,7 @@ export const END_GAME = gql`
     endGame(data: $data) {
       id
       name
+      played
       wins
       losses
       goalsFor

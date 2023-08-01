@@ -10,6 +10,7 @@ import { message } from "antd";
 export type PlayerType = {
   id: string;
   name: string;
+  played: number;
   wins: number;
   losses: number;
   goalsFor: number;

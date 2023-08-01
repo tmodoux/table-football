@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { PlayerType } from "../App";
 import { Alert, Button, InputNumber } from "antd";
 import { ReactComponent as Player1Icon } from "../icons/player1.svg";
