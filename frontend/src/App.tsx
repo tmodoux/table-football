@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Scoreboard from "./components/Scoreboard";
 import Game from "./components/Game";
+import Player from "./components/Player";
 
 export type PlayerType = {
   id: string;
@@ -32,9 +33,14 @@ function App() {
     },
   ]);
 
+  const addPlayer = (player: PlayerType) => {
+    setPlayers([...players, player]);
+  };
+
   return (
     <div className="App">
       <Game players={players} />
+      <Player addPlayer={addPlayer} />
       <Scoreboard players={players} />
     </div>
   );
