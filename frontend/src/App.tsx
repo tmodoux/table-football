@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import Scoreboard from "./components/Scoreboard";
+import Game from "./components/Game";
 
 export type PlayerType = {
   id: string;
@@ -33,6 +34,7 @@ function App() {
 
   return (
     <div className="App">
+      <Game players={players} />
       <Scoreboard players={players} />
     </div>
   );
