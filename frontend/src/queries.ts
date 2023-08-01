@@ -12,3 +12,16 @@ export const GET_PLAYERS = gql`
     }
   }
 `;
+
+export const CREATE_PLAYER = gql`
+  mutation CreatePlayer($data: CreatePlayerInput!) {
+    createPlayer(data: $data) {
+      id
+      name
+      wins
+      losses
+      goalsFor
+      goalsAgainst
+    }
+  }
+`;

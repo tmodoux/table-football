@@ -73,6 +73,10 @@ const Game = ({ players }: GamePropsType) => {
             size="large"
             icon={getPlayerIcon(player.id)}
             onClick={() => clickPlayer(player.id)}
+            style={{
+              alignItems: "center",
+              display: "inline-flex",
+            }}
           >
             {player.name} ({player.id})
           </Button>

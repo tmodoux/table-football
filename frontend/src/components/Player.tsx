@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { PlayerType } from "../App";
 import { Button, Input } from "antd";
+import { CREATE_PLAYER } from "../queries";
+import { useMutation } from "@apollo/client";
 
 type PlayerPropsType = {
   addPlayer: (player: PlayerType) => void;
@@ -9,15 +11,14 @@ type PlayerPropsType = {
 const Player = ({ addPlayer }: PlayerPropsType) => {
   const [name, setName] = useState("");
 
+  const [createPlayer] = useMutation(CREATE_PLAYER, {
+    onCompleted(data) {
+      addPlayer(data);
+    },
+  });
+
   const createNewPlayer = () => {
-    addPlayer({
-      id: name,
-      name: name,
-      wins: 0,
-      losses: 0,
-      goalsFor: 0,
-      goalsAgainst: 0,
-    });
+    createPlayer({ variables: { data: { name: name } } });
     setName("");
   };
 
