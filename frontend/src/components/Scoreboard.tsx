@@ -1,4 +1,3 @@
-import React from "react";
 import { PlayerType } from "../App";
 import { Table } from "antd";
 

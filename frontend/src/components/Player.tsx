@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { PlayerType } from "../App";
 import { Button, Input } from "antd";
 import { CREATE_PLAYER } from "../queries";
@@ -40,6 +40,7 @@ const Player = ({ addPlayer, messageApi }: PlayerPropsType) => {
       <Button
         size="large"
         onClick={() => createNewPlayer()}
+        disabled={!name}
         style={{
           alignItems: "center",
           display: "inline-flex",

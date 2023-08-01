@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import { ReactNode, useState } from "react";
 import { PlayerType } from "../App";
 import { Alert, Button, InputNumber } from "antd";
 import { ReactComponent as Player1Icon } from "../icons/player1.svg";
@@ -20,8 +20,8 @@ const Game = ({ players, updatePlayers, messageApi }: GamePropsType) => {
   const [score1, setScore1] = useState(0);
   const [score2, setScore2] = useState(0);
 
-  const [updateScore, { data, loading, error }] = useMutation(UPDATE_SCORE, {
-    onCompleted(data, clientOptions) {
+  const [updateScore] = useMutation(UPDATE_SCORE, {
+    onCompleted(data) {
       updatePlayers(data.updateScore);
       messageApi.success("Scores successfully updated!");
     },
@@ -145,7 +145,7 @@ const Game = ({ players, updatePlayers, messageApi }: GamePropsType) => {
           onChange={handleScore2Change}
         />
       </div>
-      <Button size="large" onClick={() => endGame()}>
+      <Button size="large" disabled={!player1 || !player2} onClick={() => endGame()}>
         End current game
       </Button>
     </div>
