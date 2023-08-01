@@ -5,6 +5,7 @@ import Game from "./components/Game";
 import Player from "./components/Player";
 import { useQuery } from "@apollo/client";
 import { GET_PLAYERS } from "./queries";
+import { message } from "antd";
 
 export type PlayerType = {
   id: string;
@@ -16,28 +17,17 @@ export type PlayerType = {
 };
 
 function App() {
-  const [players, setPlayers] = useState<PlayerType[]>([
-    {
-      id: "1",
-      name: "jean",
-      wins: 3,
-      losses: 4,
-      goalsFor: 9,
-      goalsAgainst: 12,
-    },
-    {
-      id: "2",
-      name: "jeanne",
-      wins: 4,
-      losses: 3,
-      goalsFor: 12,
-      goalsAgainst: 9,
-    },
-  ]);
+  const [players, setPlayers] = useState<PlayerType[]>([]);
+  const [messageApi, contextHolder] = message.useMessage();
 
   useQuery(GET_PLAYERS, {
     onCompleted(data) {
       updatePlayers(data.players);
+      messageApi.success("Players successfully loaded!");
+    },
+    onError(error) {
+      messageApi.error("Error while loading players!");
+      console.log(error);
     },
   });
 
@@ -51,8 +41,9 @@ function App() {
 
   return (
     <div className="App">
+      {contextHolder}
       <Game players={players} />
-      <Player addPlayer={addPlayer} />
+      <Player addPlayer={addPlayer} messageApi={messageApi} />
       <Scoreboard players={players} />
     </div>
   );
