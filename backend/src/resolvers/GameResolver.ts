@@ -3,23 +3,26 @@ import { Game } from "../models/Game";
 import { UpdateGameInput } from "../inputs/UpdateGameInput";
 import { Player } from "../models/Player";
 import { EndGameInput } from "../inputs/EndGameInput";
+import { CreateGameInput } from "../inputs/CreateGameInput";
 
 @Resolver()
 export class GameResolver {
 
-  @Query(() => Game)
-  async getCurrentGame() {
-    let game = await Game.findOne({ where: { isPlaying: true } });
-    if (!game) {
-      game = Game.create({
-        isPlaying: true,
-        player1: "",
-        player2: "",
-        goals1: 0,
-        goals2: 0,
-      });
-      await game.save();
-    }
+  @Query(() => [Game])
+  getCurrentGame() {
+    return Game.find({ where: { isPlaying: true } });
+  }
+
+  @Mutation(() => Game)
+  async createGame(@Arg("data") data: CreateGameInput) {
+    const game = Game.create({
+      player1: data.player1,
+      player2: data.player2,
+      goals1: 0,
+      goals2: 0,
+      isPlaying: true,
+    });
+    await game.save();
     return game;
   }
 

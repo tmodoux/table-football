@@ -5,7 +5,7 @@ import Game from "./components/Game";
 import Player from "./components/Player";
 import { useQuery } from "@apollo/client";
 import { GET_PLAYERS } from "./queries";
-import { message } from "antd";
+import { Tabs, message } from "antd";
 
 export type PlayerType = {
   id: string;
@@ -19,7 +19,7 @@ export type PlayerType = {
 
 function App() {
   const [players, setPlayers] = useState<PlayerType[]>([]);
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = message.useMessage({ maxCount: 1 });
 
   useQuery(GET_PLAYERS, {
     onCompleted(data) {
@@ -40,13 +40,38 @@ function App() {
     setPlayers(updatedPlayers);
   };
 
+  const tabItems = [
+    {
+      key: "live",
+      label: "Live game",
+      isLive: true,
+    },
+    {
+      key: "offline",
+      label: "Offline game",
+      isLive: false,
+    },
+  ];
+
   return (
     <div className="App">
       {contextHolder}
-      <Game
-        players={players}
-        updatePlayers={updatePlayers}
-        messageApi={messageApi}
+      <Tabs
+        centered
+        defaultActiveKey="1"
+        items={tabItems.map((item) => {
+          return {
+            key: item.key,
+            label: item.label,
+            children:
+              <Game
+                players={players}
+                updatePlayers={updatePlayers}
+                messageApi={messageApi}
+                isLive={item.isLive}
+              />
+          }
+        })}
       />
       <Player addPlayer={addPlayer} messageApi={messageApi} />
       <Scoreboard players={players} />

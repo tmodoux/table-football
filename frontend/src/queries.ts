@@ -41,6 +41,19 @@ export const GET_CURRENT_GAME = gql`
   }
 `;
 
+export const CREATE_GAME = gql`
+  mutation CreateGame($data: CreateGameInput!) {
+    createGame(data: $data) {
+      id
+      player1
+      player2
+      goals1
+      goals2
+      isPlaying
+    }
+  }
+`;
+
 export const UPDATE_GAME = gql`
   mutation UpdateGame($id: String!, $data: UpdateGameInput!) {
     updateGame(id: $id, data: $data) {
