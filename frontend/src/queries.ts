@@ -36,7 +36,6 @@ export const GET_CURRENT_GAME = gql`
       player2
       goals1
       goals2
-      isPlaying
     }
   }
 `;
@@ -49,7 +48,6 @@ export const CREATE_GAME = gql`
       player2
       goals1
       goals2
-      isPlaying
     }
   }
 `;
@@ -62,7 +60,6 @@ export const UPDATE_GAME = gql`
       player2
       goals1
       goals2
-      isPlaying
     }
   }
 `;

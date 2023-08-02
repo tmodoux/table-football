@@ -5,22 +5,24 @@ import { Player } from "../models/Player";
 import { EndGameInput } from "../inputs/EndGameInput";
 import { CreateGameInput } from "../inputs/CreateGameInput";
 
+const CURRENT_GAME_ID = "0";
+
 @Resolver()
 export class GameResolver {
 
   @Query(() => [Game])
-  getCurrentGame() {
-    return Game.find({ where: { isPlaying: true } });
+  async getCurrentGame() {
+    return Game.find({ where: { id: CURRENT_GAME_ID } });
   }
 
   @Mutation(() => Game)
   async createGame(@Arg("data") data: CreateGameInput) {
     const game = Game.create({
+      id: CURRENT_GAME_ID,
       player1: data.player1,
       player2: data.player2,
       goals1: 0,
       goals2: 0,
-      isPlaying: true,
     });
     await game.save();
     return game;
@@ -37,43 +39,35 @@ export class GameResolver {
 
   @Mutation(() => [Player])
   async endGame(@Arg("data") data: EndGameInput) {
-    let game;
-    // Creating and ending an already played game
-    if (!data.id) {
-      game = Game.create();
-      Object.assign(game, data);
-    }
-    // Ending the current game
-    else {
-      game = await Game.findOne({ where: { id: data.id } });
-      if (!game) throw new Error("Game not found!");
-    }
-    game.isPlaying = false;
-    await game.save();
-
-    // Compute scores
-    const player1 = await Player.findOne({ where: { id: game.player1 } });
-    const player2 = await Player.findOne({ where: { id: game.player2 } });
-    if (!player1 || !player2) throw new Error("Players not found!");
-    // Wins/losses do not change if tie
-    if (game.goals1 != game.goals2) {
-      if (game.goals1 > game.goals2) {
-        player1.wins++;
-        player2.losses++;
-      } else {
-        player2.wins++;
-        player1.losses++;
+    if (data.id) {
+      // End current game
+      const currentGame = await Game.findOne({ where: { id: data.id } });
+      if (currentGame) {
+        await currentGame.remove();
       }
     }
-    player1.played++;
-    player2.played++;
-    player1.goalsAgainst += game.goals2;
-    player1.goalsFor += game.goals2;
-    player2.goalsAgainst += game.goals1;
-    player2.goalsFor += game.goals1;
-    await player1.save();
-    await player2.save();
+    // Compute scores
+    await Promise.all([
+      this.updateScore(data.player1, data.goals1, data.goals2),
+      this.updateScore(data.player2, data.goals2, data.goals1)
+    ]);
     return Player.find();
   }
 
+  async updateScore(id: string, goalsFor: number, goalsAgainst: number) {
+    const player = await Player.findOne({ where: { id } });
+    if (!player) throw new Error("Players not found!");
+    // Wins/losses do not change if tie
+    if (goalsFor != goalsAgainst) {
+      if (goalsFor > goalsAgainst) {
+        player.wins++;
+      } else {
+        player.losses++
+      }
+    }
+    player.played++;
+    player.goalsAgainst += goalsAgainst;
+    player.goalsFor += goalsFor;
+    await player.save();
+  }
 }

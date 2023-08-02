@@ -13,7 +13,4 @@ export class UpdateGameInput {
 
   @Field()
   goals2?: number;
-
-  @Field()
-  isPlaying?: Boolean;
 }

@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { PlayerType } from "../App";
-import { Alert, Button, InputNumber } from "antd";
+import { Button, InputNumber } from "antd";
 import { ReactComponent as Player1Icon } from "../icons/player1.svg";
 import { ReactComponent as Player2Icon } from "../icons/player2.svg";
 import CustomIcon from "./CustomIcon";
@@ -22,7 +22,6 @@ type Game = {
   player2: string;
   goals1: number;
   goals2: number;
-  isPlaying: boolean;
 }
 
 const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsType) => {
@@ -32,7 +31,6 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
     player2: "",
     goals1: 0,
     goals2: 0,
-    isPlaying: false,
   };
   const [currentGame, setCurrentGame] = useState<Game>(newGame);
   const isPlayerSelection = !currentGame.player1 || !currentGame.player2;
@@ -49,7 +47,6 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
           player2: currentGame.player2,
           goals1: currentGame.goals1,
           goals2: currentGame.goals2,
-          isPlaying: currentGame.isPlaying,
         });
         messageApi.success("Live game successfully loaded!");
       }
@@ -62,7 +59,7 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
 
   const [createGame] = useMutation(CREATE_GAME, {
     onCompleted(data) {
-      setCurrentGame({ ...currentGame, id: data.createGame.id, isPlaying: true });
+      setCurrentGame({ ...currentGame, id: data.createGame.id });
       messageApi.success("Game successfully created!");
     },
     onError(error) {
@@ -73,9 +70,6 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
   });
 
   const [updateGame] = useMutation(UPDATE_GAME, {
-    onCompleted() {
-      messageApi.success("Game successfully updated!");
-    },
     onError(error) {
       messageApi.error("Error while updating game!");
       console.log(error);
@@ -168,6 +162,7 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
                 { key: "goals2", icon: Player2Icon, value: currentGame.goals2 }
               ].map(score =>
                 <InputNumber
+                  key={score.key}
                   addonBefore={<CustomIcon component={score.icon} />}
                   value={score.value}
                   min={0}

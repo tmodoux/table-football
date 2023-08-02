@@ -6,17 +6,14 @@ export class EndGameInput {
   id?: string;
 
   @Field()
-  player1?: string;
+  player1: string;
 
   @Field()
-  player2?: string;
+  player2: string;
 
   @Field()
-  goals1?: number;
+  goals1: number;
 
   @Field()
-  goals2?: number;
-
-  @Field()
-  isPlaying?: boolean;
+  goals2: number;
 }
