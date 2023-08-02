@@ -2,5 +2,5 @@ FROM node:18-alpine as node-image
 WORKDIR /app
 COPY . .
 RUN npm install
-CMD ["node", "start"]
+CMD ["npm", "start"]
 EXPOSE 4000
