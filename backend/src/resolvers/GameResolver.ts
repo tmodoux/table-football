@@ -56,7 +56,7 @@ export class GameResolver {
 
   async updateScore(id: string, goalsFor: number, goalsAgainst: number) {
     const player = await Player.findOne({ where: { id } });
-    if (!player) throw new Error("Players not found!");
+    if (!player) throw new Error("Player not found!");
     // Wins/losses do not change if tie
     if (goalsFor != goalsAgainst) {
       if (goalsFor > goalsAgainst) {
