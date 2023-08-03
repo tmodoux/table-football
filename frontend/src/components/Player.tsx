@@ -6,20 +6,20 @@ import { useMutation } from "@apollo/client";
 import { MessageInstance } from "antd/es/message/interface";
 
 type PlayerPropsType = {
-  addPlayer: (player: PlayerType) => void;
-  messageApi: MessageInstance;
+  addPlayer?: (player: PlayerType) => void;
+  messageApi?: MessageInstance;
 };
 
-const Player = ({ addPlayer, messageApi }: PlayerPropsType) => {
+const Player = ({ addPlayer = () => { }, messageApi }: PlayerPropsType) => {
   const [name, setName] = useState("");
 
   const [createPlayer] = useMutation(CREATE_PLAYER, {
     onCompleted(data) {
       addPlayer(data.createPlayer);
-      messageApi.success("Players successfully created!");
+      messageApi?.success("Players successfully created!");
     },
     onError(error) {
-      messageApi.error("Error while creating player!");
+      messageApi?.error("Error while creating player!");
       console.log(error);
     },
   });

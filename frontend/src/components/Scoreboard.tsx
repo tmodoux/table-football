@@ -2,10 +2,10 @@ import { PlayerType } from "../App";
 import { Table } from "antd";
 
 type ScoreboardPropsType = {
-  players: PlayerType[];
+  players?: PlayerType[];
 };
 
-const Scoreboard = ({ players }: ScoreboardPropsType) => {
+const Scoreboard = ({ players = [] }: ScoreboardPropsType) => {
   const columns = [
     {
       title: "Player name",

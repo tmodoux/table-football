@@ -10,9 +10,9 @@ import { MessageInstance } from "antd/es/message/interface";
 import CustomAlert from "./CustomAlert";
 
 type GamePropsType = {
-  players: PlayerType[];
-  updatePlayers: (players: PlayerType[]) => void;
-  messageApi: MessageInstance;
+  players?: PlayerType[];
+  updatePlayers?: (players: PlayerType[]) => void;
+  messageApi?: MessageInstance;
   isLive?: boolean;
 };
 
@@ -24,7 +24,7 @@ type Game = {
   goals2: number;
 }
 
-const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsType) => {
+const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = false }: GamePropsType) => {
   const newGame = {
     id: "",
     player1: "",
@@ -48,11 +48,11 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
           goals1: currentGame.goals1,
           goals2: currentGame.goals2,
         });
-        messageApi.success("Live game successfully loaded!");
+        messageApi?.success("Live game successfully loaded!");
       }
     },
     onError(error) {
-      messageApi.error("Error while loading current game!");
+      messageApi?.error("Error while loading current game!");
       console.log(error);
     },
   });
@@ -60,10 +60,10 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
   const [createGame] = useMutation(CREATE_GAME, {
     onCompleted(data) {
       setCurrentGame({ ...currentGame, id: data.createGame.id });
-      messageApi.success("Game successfully created!");
+      messageApi?.success("Game successfully created!");
     },
     onError(error) {
-      messageApi.error("Error while creating game!");
+      messageApi?.error("Error while creating game!");
       console.log(error);
     },
     variables: { data: { player1: currentGame.player1, player2: currentGame.player2 } }
@@ -71,7 +71,7 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
 
   const [updateGame] = useMutation(UPDATE_GAME, {
     onError(error) {
-      messageApi.error("Error while updating game!");
+      messageApi?.error("Error while updating game!");
       console.log(error);
     },
   });
@@ -80,10 +80,10 @@ const Game = ({ players, updatePlayers, messageApi, isLive = false }: GamePropsT
     onCompleted(data) {
       updatePlayers(data.endGame);
       setCurrentGame(newGame);
-      messageApi.success("Scores successfully updated!");
+      messageApi?.success("Scores successfully updated!");
     },
     onError(error) {
-      messageApi.error("Error while ending game!");
+      messageApi?.error("Error while ending game!");
       console.log(error);
     },
     variables: { data: currentGame }
