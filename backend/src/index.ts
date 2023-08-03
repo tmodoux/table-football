@@ -5,6 +5,8 @@ import { buildSchema } from "type-graphql";
 import { AppDataSource } from "./data-source";
 import { GameResolver } from "./resolvers/GameResolver";
 
+const PORT = 4000;
+
 async function main() {
   await AppDataSource.initialize();
   const schema = await buildSchema({
@@ -12,7 +14,7 @@ async function main() {
     validate: { forbidUnknownValues: false },
   });
   const server = new ApolloServer({ schema });
-  await server.listen(4000);
-  console.log("Server has started!");
+  await server.listen(PORT);
+  console.log(`Server listening on port ${PORT}.`);
 }
 main();

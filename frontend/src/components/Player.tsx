@@ -38,13 +38,10 @@ const Player = ({ addPlayer = () => { }, messageApi }: PlayerPropsType) => {
         onChange={(e) => setName(e.target.value)}
       />
       <Button
+        className="center-align"
         size="large"
         onClick={() => createNewPlayer()}
         disabled={!name}
-        style={{
-          alignItems: "center",
-          display: "inline-flex",
-        }}
       >
         Create new player
       </Button>

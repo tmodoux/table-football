@@ -16,7 +16,7 @@ type GamePropsType = {
   isLive?: boolean;
 };
 
-type Game = {
+type GameType = {
   id: string;
   player1: string;
   player2: string;
@@ -25,14 +25,14 @@ type Game = {
 }
 
 const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = false }: GamePropsType) => {
-  const newGame = {
+  const newGame: GameType = {
     id: "",
     player1: "",
     player2: "",
     goals1: 0,
     goals2: 0,
   };
-  const [currentGame, setCurrentGame] = useState<Game>(newGame);
+  const [currentGame, setCurrentGame] = useState<GameType>(newGame);
   const isPlayerSelection = !currentGame.player1 || !currentGame.player2;
   const isGameCreation = isLive && !currentGame.id;
   const isGamePlaying = !!currentGame.id;
@@ -126,30 +126,22 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
 
   useEffect(() => {
     if (isLive) getCurrentGame();
-  }, []);
+  }, [isLive, getCurrentGame]);
 
   return (
     <div>
       <CustomAlert numPlayers={players.length} isGameCreation={isGameCreation} isGamePlaying={isGamePlaying} />
       {players.length ?
         <div>
-          <div
-            style={{
-              alignItems: "center",
-              display: "inline-flex",
-            }}
-          >
+          <div className="center-inline">
             {players.map((player) => (
               <Button
+                className="center-inline"
                 disabled={isGamePlaying}
                 key={player.id}
                 size="large"
                 icon={getPlayerIcon(player.id)}
                 onClick={() => clickPlayer(player.id)}
-                style={{
-                  alignItems: "center",
-                  display: "inline-flex",
-                }}
               >
                 {player.name} ({player.id})
               </Button>

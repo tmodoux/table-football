@@ -1,6 +1,6 @@
 import { ApolloServer } from "apollo-server";
 import { DataSource } from "typeorm";
-import { CREATE_GAME, CREATE_PLAYER, END_GAME, GET_CURRENT_GAME, GET_PLAYERS, UPDATE_GAME } from "./testQueries";
+import { CREATE_GAME, CREATE_PLAYER, END_GAME, GET_CURRENT_GAME, UPDATE_GAME } from "./testQueries";
 import { initTestEnv } from "./testUtils";
 import { Player } from "../src/models/Player";
 

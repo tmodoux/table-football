@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import Scoreboard from "./components/Scoreboard";
 import Game from "./components/Game";
 import Player from "./components/Player";

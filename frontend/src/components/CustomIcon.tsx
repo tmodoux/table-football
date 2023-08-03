@@ -7,9 +7,7 @@ type CustomIconPropsType = {
 export const CustomIcon = ({ component }: CustomIconPropsType) => {
   return (
     <Icon
-      style={{
-        fontSize: "30px",
-      }}
+      className="icon"
       component={component}
     />
   );
