@@ -16,6 +16,7 @@ exports[`Snapshots tests renders App 1`] = `
     >
       <input
         class="ant-input css-dev-only-do-not-override-txh9fw"
+        maxlength="15"
         placeholder="Enter player name"
         type="text"
         value=""
@@ -74,6 +75,7 @@ exports[`Snapshots tests renders Player 1`] = `
     >
       <input
         class="ant-input css-dev-only-do-not-override-txh9fw"
+        maxlength="15"
         placeholder="Enter player name"
         type="text"
         value=""

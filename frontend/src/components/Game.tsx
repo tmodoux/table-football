@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { PlayerType } from "../App";
-import { Button, InputNumber, List, Row, Space } from "antd";
+import { Button, InputNumber, Row, Space } from "antd";
 import { ReactComponent as Player1Icon } from "../icons/player1.svg";
 import { ReactComponent as Player2Icon } from "../icons/player2.svg";
 import CustomIcon from "./CustomIcon";
