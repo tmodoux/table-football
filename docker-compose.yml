@@ -1,14 +1,18 @@
-version: '3'
+version: "3"
 services:
-  backend_service:
-    build:
-      context: backend/
+  backend-service:
+    image: tmodoux/table-football-backend-service
+    # Use this instead to build the image locally
+    #build:
+    #  context: backend/
     ports:
-     - "4000:4000"
-  frontend_service:
-    build:
-      context: frontend/
+      - "4000:4000"
+  frontend-service:
+    image: tmodoux/table-football-frontend-service
+    # Use this instead to build the image locally
+    #build:
+    #  context: frontend/
     ports:
-     - "3000:3000"
+      - "3000:3000"
     depends_on:
-     - backend_service
+      - backend-service

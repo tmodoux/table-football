@@ -3,3 +3,4 @@ npm-debug.log
 .gitignore
 Dockerfile
 .dockerignore
+db.sqlite3

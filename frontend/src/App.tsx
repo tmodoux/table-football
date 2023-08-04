@@ -18,7 +18,10 @@ export type PlayerType = {
 
 function App() {
   const [players, setPlayers] = useState<PlayerType[]>([]);
-  const [messageApi, contextHolder] = message.useMessage({ maxCount: 1 });
+  const [messageApi, contextHolder] = message.useMessage({
+    maxCount: 1,
+    top: 75,
+  });
 
   useQuery(GET_PLAYERS, {
     onCompleted(data) {
@@ -63,14 +66,15 @@ function App() {
           return {
             key: item.key,
             label: item.label,
-            children:
+            children: (
               <Game
                 players={players}
                 updatePlayers={updatePlayers}
                 messageApi={messageApi}
                 isLive={item.isLive}
               />
-          }
+            ),
+          };
         })}
       />
       <Divider />
