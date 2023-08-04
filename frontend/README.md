@@ -15,6 +15,8 @@ npm start
 
 By default, it will run on port 3000, you can change this in the [.env file](./.env).
 
+Then open the following URL in your browser: http://localhost:3000
+
 ## Other commands
 
 - Run tests: `npm test`

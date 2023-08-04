@@ -15,6 +15,8 @@ npm start
 
 By default, it will run on port 4000, you can change this in the [.env file](./.env).
 
+You can explore the API documentation as well as a sandbox environment by opening the following URL in your browser: http://localhost:4000
+
 ## Other commands
 
 - Run tests: `npm test`

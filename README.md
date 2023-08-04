@@ -20,6 +20,8 @@ docker-compose up
 
 It will run two Docker images, the [frontend service](./frontend/Dockerfile) on port 3000 and the [backend service](./backend/Dockerfile) on port 4000 (ports mapping can be changed in [docker-compose.yml](./docker-compose.yml)).
 
+Then open the following URL in your browser: http://localhost:3000
+
 ## Learn more
 
 To know more about each service or to run them separately and locally, please see the respective README's:
