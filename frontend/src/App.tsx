@@ -4,7 +4,7 @@ import Game from "./components/Game";
 import Player from "./components/Player";
 import { useQuery } from "@apollo/client";
 import { GET_PLAYERS } from "./queries";
-import { Tabs, message } from "antd";
+import { Divider, Tabs, message } from "antd";
 
 export type PlayerType = {
   id: string;
@@ -56,6 +56,7 @@ function App() {
     <div className="App">
       {contextHolder}
       <Tabs
+        size="large"
         centered
         defaultActiveKey="1"
         items={tabItems.map((item) => {
@@ -72,7 +73,9 @@ function App() {
           }
         })}
       />
+      <Divider />
       <Player addPlayer={addPlayer} messageApi={messageApi} />
+      <Divider />
       <Scoreboard players={players} />
     </div>
   );

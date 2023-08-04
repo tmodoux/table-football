@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { PlayerType } from "../App";
-import { Button, InputNumber } from "antd";
+import { Button, InputNumber, List, Space } from "antd";
 import { ReactComponent as Player1Icon } from "../icons/player1.svg";
 import { ReactComponent as Player2Icon } from "../icons/player2.svg";
 import CustomIcon from "./CustomIcon";
@@ -124,31 +124,33 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
     }
   };
 
+  const playersData = players.map(player =>
+    <Button
+      className="center-inline"
+      disabled={isGamePlaying}
+      key={player.id}
+      size="large"
+      icon={getPlayerIcon(player.id)}
+      onClick={() => clickPlayer(player.id)}
+    >
+      {player.name} ({player.id})
+    </Button>
+  );
+
   useEffect(() => {
     if (isLive) getCurrentGame();
   }, [isLive, getCurrentGame]);
 
   return (
-    <div>
+    <>
       <CustomAlert numPlayers={players.length} isGameCreation={isGameCreation} isGamePlaying={isGamePlaying} />
       {players.length ?
-        <div>
-          <div className="center-inline">
-            {players.map((player) => (
-              <Button
-                className="center-inline"
-                disabled={isGamePlaying}
-                key={player.id}
-                size="large"
-                icon={getPlayerIcon(player.id)}
-                onClick={() => clickPlayer(player.id)}
-              >
-                {player.name} ({player.id})
-              </Button>
-            ))}
-          </div>
+        <Space direction="vertical">
+          <b>Players</b>
+          <List itemLayout="horizontal" dataSource={playersData} renderItem={item => item}></List>
           {isGameCreation ||
-            <div>
+            <>
+              <b>Scores</b>
               {[
                 { key: "goals1", icon: Player1Icon, value: currentGame.goals1 },
                 { key: "goals2", icon: Player2Icon, value: currentGame.goals2 }
@@ -161,15 +163,13 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
                   onChange={(value) => updateScore(score.key, value)}
                 />
               )}
-            </div>
+            </>
           }
-          <div>
-            <Button size="large" disabled={isPlayerSelection} onClick={() => isGameCreation ? createGame() : endGame()}>
-              {isGameCreation ? "Start game" : (isLive ? "End game" : "Save game")}
-            </Button>
-          </div>
-        </div> : <></>}
-    </div>
+          <Button size="large" disabled={isPlayerSelection} onClick={() => isGameCreation ? createGame() : endGame()}>
+            {isGameCreation ? "Start game" : (isLive ? "End game" : "Save game")}
+          </Button>
+        </Space> : <></>}
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import { PlayerType } from "../App";
-import { Alert, Table } from "antd";
+import { Alert, Table, Typography } from "antd";
 
 type ScoreboardPropsType = {
   players?: PlayerType[];
@@ -67,11 +67,11 @@ const Scoreboard = ({ players = [] }: ScoreboardPropsType) => {
   });
 
   return (
-    <div>
-      <h2><u>Scoreboard</u></h2>
+    <>
+      <Typography.Title level={2}>Scoreboard</Typography.Title>
       <Alert banner type="info" description="Players are ranked by Ratio first, then Goals difference, then Goals For, then Player name." showIcon={false} />
       <Table columns={columns} dataSource={data} />
-    </div>
+    </>
   );
 };
 
