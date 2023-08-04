@@ -10,7 +10,7 @@ type PlayerPropsType = {
   messageApi?: MessageInstance;
 };
 
-const Player = ({ addPlayer = () => { }, messageApi }: PlayerPropsType) => {
+const Player = ({ addPlayer = () => {}, messageApi }: PlayerPropsType) => {
   const [name, setName] = useState("");
 
   const [createPlayer] = useMutation(CREATE_PLAYER, {
@@ -36,13 +36,10 @@ const Player = ({ addPlayer = () => { }, messageApi }: PlayerPropsType) => {
         <Input
           placeholder="Enter player name"
           value={name}
+          maxLength={15}
           onChange={(e) => setName(e.target.value)}
         />
-        <Button
-          size="large"
-          onClick={() => createNewPlayer()}
-          disabled={!name}
-        >
+        <Button size="large" onClick={() => createNewPlayer()} disabled={!name}>
           Create new player
         </Button>
       </Space>

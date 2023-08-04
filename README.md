@@ -1,6 +1,6 @@
 # Table-football
 
-Simple program to keep track of the score during table-football games
+Simple service to keep track of the score during table-football games
 
 The stack consists of:
 

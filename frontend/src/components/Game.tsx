@@ -1,10 +1,15 @@
 import { ReactNode, useEffect, useState } from "react";
 import { PlayerType } from "../App";
-import { Button, InputNumber, List, Space } from "antd";
+import { Button, InputNumber, List, Row, Space } from "antd";
 import { ReactComponent as Player1Icon } from "../icons/player1.svg";
 import { ReactComponent as Player2Icon } from "../icons/player2.svg";
 import CustomIcon from "./CustomIcon";
-import { CREATE_GAME, END_GAME, GET_CURRENT_GAME, UPDATE_GAME } from "../queries";
+import {
+  CREATE_GAME,
+  END_GAME,
+  GET_CURRENT_GAME,
+  UPDATE_GAME,
+} from "../queries";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { MessageInstance } from "antd/es/message/interface";
 import CustomAlert from "./CustomAlert";
@@ -22,9 +27,14 @@ type GameType = {
   player2: string;
   goals1: number;
   goals2: number;
-}
+};
 
-const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = false }: GamePropsType) => {
+const Game = ({
+  players = [],
+  updatePlayers = () => {},
+  messageApi,
+  isLive = false,
+}: GamePropsType) => {
   const newGame: GameType = {
     id: "",
     player1: "",
@@ -66,7 +76,9 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
       messageApi?.error("Error while creating game!");
       console.log(error);
     },
-    variables: { data: { player1: currentGame.player1, player2: currentGame.player2 } }
+    variables: {
+      data: { player1: currentGame.player1, player2: currentGame.player2 },
+    },
   });
 
   const [updateGame] = useMutation(UPDATE_GAME, {
@@ -86,7 +98,7 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
       messageApi?.error("Error while ending game!");
       console.log(error);
     },
-    variables: { data: currentGame }
+    variables: { data: currentGame },
   });
 
   const updateScore = (key: string, value: number | null) => {
@@ -95,10 +107,10 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
     if (isLive) {
       const { id, ...game } = updatedGame;
       updateGame({
-        variables: { id, data: game }
+        variables: { id, data: game },
       });
     }
-  }
+  };
 
   const clickPlayer = (playerId: string): void => {
     if (playerId === currentGame.player1) {
@@ -118,24 +130,25 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
     } else {
       return (
         <CustomIcon
-          component={playerId === currentGame.player1 ? Player1Icon : Player2Icon}
+          component={
+            playerId === currentGame.player1 ? Player1Icon : Player2Icon
+          }
         />
       );
     }
   };
 
-  const playersData = players.map(player =>
+  const playersData = players.map((player) => (
     <Button
       className="center-inline"
       disabled={isGamePlaying}
       key={player.id}
-      size="large"
       icon={getPlayerIcon(player.id)}
       onClick={() => clickPlayer(player.id)}
     >
       {player.name} ({player.id})
     </Button>
-  );
+  ));
 
   useEffect(() => {
     if (isLive) getCurrentGame();
@@ -143,18 +156,22 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
 
   return (
     <>
-      <CustomAlert numPlayers={players.length} isGameCreation={isGameCreation} isGamePlaying={isGamePlaying} />
-      {players.length ?
+      <CustomAlert
+        numPlayers={players.length}
+        isGameCreation={isGameCreation}
+        isGamePlaying={isGamePlaying}
+      />
+      {players.length ? (
         <Space direction="vertical">
           <b>Players</b>
-          <List itemLayout="horizontal" dataSource={playersData} renderItem={item => item}></List>
-          {isGameCreation ||
+          <Row>{playersData}</Row>
+          {isGameCreation || (
             <>
               <b>Scores</b>
               {[
                 { key: "goals1", icon: Player1Icon, value: currentGame.goals1 },
-                { key: "goals2", icon: Player2Icon, value: currentGame.goals2 }
-              ].map(score =>
+                { key: "goals2", icon: Player2Icon, value: currentGame.goals2 },
+              ].map((score) => (
                 <InputNumber
                   key={score.key}
                   addonBefore={<CustomIcon component={score.icon} />}
@@ -162,13 +179,20 @@ const Game = ({ players = [], updatePlayers = () => { }, messageApi, isLive = fa
                   min={0}
                   onChange={(value) => updateScore(score.key, value)}
                 />
-              )}
+              ))}
             </>
-          }
-          <Button size="large" disabled={isPlayerSelection} onClick={() => isGameCreation ? createGame() : endGame()}>
-            {isGameCreation ? "Start game" : (isLive ? "End game" : "Save game")}
+          )}
+          <Button
+            size="large"
+            disabled={isPlayerSelection}
+            onClick={() => (isGameCreation ? createGame() : endGame())}
+          >
+            {isGameCreation ? "Start game" : isLive ? "End game" : "Save game"}
           </Button>
-        </Space> : <></>}
+        </Space>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
