@@ -4,8 +4,9 @@ import { PlayerResolver } from "./resolvers/PlayerResolver";
 import { buildSchema } from "type-graphql";
 import { AppDataSource } from "./data-source";
 import { GameResolver } from "./resolvers/GameResolver";
+require("dotenv").config();
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 async function main() {
   await AppDataSource.initialize();
